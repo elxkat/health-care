@@ -6,6 +6,7 @@ const app = express();
 
 healthCareService(app);
 
-app.listen(3000);
+// uncomment for local development
+// app.listen(3000);
 
 export const api = functions.https.onRequest(app);
