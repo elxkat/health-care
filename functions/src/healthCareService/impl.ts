@@ -32,13 +32,13 @@ export const equalsQuery = (fieldName: string, value) => {
   return `${fieldName} = ${querySyntax}${value}${querySyntax}`;
 };
 
-export const queryConcat = (queryParts: string[]) => {
-  const queryConcat = queryParts.reduce((queryConcat, part) => {
+export const whereQueryConcat = (queryParts: string[]) => {
+  const queryConcat = queryParts.reduce((total, part) => {
     if (!part) {
-      return queryConcat;
+      return total;
     }
 
-    return queryConcat + `${part} AND `;
+    return total + `${part} AND `;
   }, "");
 
   return queryConcat.slice(0, queryConcat.length - 5); // remove last " AND " string
@@ -59,7 +59,7 @@ export const queryBuilder = (queryParams: ProvidersQueryParams) => {
   const averageMedicarePaymentsQuery = rangeQuery(`${tableServiceName}.${averageMedicarePaymentsColumn}`, queryParams.min_average_medicare_payments, queryParams.max_average_medicare_payments);
   const stateQuery = equalsQuery(`${tableServiceName}.${providerStateColumn}`, queryParams.state);
 
-  const wherePart = queryConcat([dischargesQuery, averageCoveredChargesQuery, averageMedicarePaymentsQuery, stateQuery]);
+  const wherePart = whereQueryConcat([dischargesQuery, averageCoveredChargesQuery, averageMedicarePaymentsQuery, stateQuery]);
 
   const selectPart = `SELECT ${extractFields(queryParams.fields)} FROM public.${tableServiceName} as ${tableServiceName}`;
   return !!wherePart ? `${selectPart} WHERE ${wherePart}` : selectPart;

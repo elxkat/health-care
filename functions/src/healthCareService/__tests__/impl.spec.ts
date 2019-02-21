@@ -1,4 +1,4 @@
-import {equalsQuery, extractFields, queryBuilder, queryConcat, rangeQuery} from "../impl";
+import {equalsQuery, extractFields, queryBuilder, whereQueryConcat, rangeQuery} from "../impl";
 import {averageCoveredChargesColumn, providerStateColumn, tableServiceName, totalDischargesColumn} from "../interfaces";
 
 
@@ -41,17 +41,17 @@ describe("healthCareService", () => {
   });
 
 
-  ///// queryConcat
-  it("queryConcat - empty array", () => {
-    expect(queryConcat([])).toBe("");
+  ///// whereQueryConcat
+  it("whereQueryConcat - empty array", () => {
+    expect(whereQueryConcat([])).toBe("");
   });
 
-  it("queryConcat - one item array", () => {
-    expect(queryConcat(["AAA"])).toBe("AAA");
+  it("whereQueryConcat - one item array", () => {
+    expect(whereQueryConcat(["AAA"])).toBe("AAA");
   });
 
-  it("queryConcat - multi items array", () => {
-    expect(queryConcat(["AAA", "BBB", "CCC"])).toBe("AAA AND BBB AND CCC");
+  it("whereQueryConcat - multi items array", () => {
+    expect(whereQueryConcat(["AAA", "BBB", "CCC"])).toBe("AAA AND BBB AND CCC");
   });
 
   ////// extractFields
