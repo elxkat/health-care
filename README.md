@@ -23,3 +23,9 @@ Limitations:
 Again - I'm probably hitting some quotas/limitations of google cloud free tier.
 The service works perfectly when ran on a local node server.
 To use the local implementation simply move the rootApi in the FE thunk to the localhost and uncomment the listen line @the server code. 
+
+    Deployed app: <br>
+    https://health-care-db.firebaseapp.com/
+    
+    Deployed service: <br>
+    https://us-central1-health-care-db.cloudfunctions.net/api/providers
