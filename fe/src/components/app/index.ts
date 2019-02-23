@@ -16,7 +16,6 @@ function mapStateToProps(state: RootState): AppStateProps {
 
 function mapDispatchToProps(dispatch: any): AppDispatchProps {
   return {
-    toggleFilters: (value) => dispatch(setHealthCareField(fieldNames.isFiltersOpen, value)),
     setHealthCareField: (fieldName, value) => dispatch(setHealthCareField(fieldName, value)),
     search: () => dispatch(search()),
   };

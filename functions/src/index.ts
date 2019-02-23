@@ -10,6 +10,6 @@ app.use(cors({ origin: true }));
 healthCareService(app);
 
 // uncomment for local development
- app.listen(3001);
+// app.listen(3001);
 
 export const api = functions.https.onRequest(app);

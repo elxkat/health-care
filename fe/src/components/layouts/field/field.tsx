@@ -4,7 +4,7 @@ import styles from './field.module.scss';
 
 export interface FieldProps<T> {
   title: string;
-  component: React.ReactElement<{ value: T; onValueChange: (value: T) => void; }>;
+  component: React.ComponentType;
   value: T;
   onValueChange: (value: T) => void;
 }
@@ -20,7 +20,7 @@ export class Field<T> extends React.PureComponent<FieldProps<T>> {
     return (
         <div className={styles.field}>
           <Label>{title}
-            {React.cloneElement(component, { value, onValueChange })}
+            {React.createElement(component as any, { value, onValueChange })}
           </Label>
         </div>
     );

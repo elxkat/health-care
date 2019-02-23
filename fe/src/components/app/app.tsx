@@ -1,29 +1,30 @@
 import React from 'react';
 import styles from './app.module.scss';
-import {Button, Collapse, Intent, Label, NumericInput, Spinner} from "@blueprintjs/core";
+import {Button, Checkbox, Collapse, Intent, Label, NumericInput, Spinner} from "@blueprintjs/core";
 import {fieldNames, HealthCareStoreSlice, StateItem} from "../../redux/healthCareReducer";
 import {DualLayout} from '../layouts/dualLayout/dualLayout';
 import {StateCombo} from "../stateCombo/stateCombo";
 import {Field} from "../layouts/field/field";
 import {Header} from "../header/header";
 import {Results} from "../results/results";
+import {FieldSelection} from "../fieldSelection/fieldSelection";
 
 export interface AppStateProps extends HealthCareStoreSlice {
 }
 
 export interface AppDispatchProps {
-  toggleFilters: (value: boolean) => void;
   setHealthCareField: (fieldName: string, value: unknown) => void;
   search: () => void;
 }
 
 const StateField = Field.ofType<StateItem | undefined>();
 const NumberField = Field.ofType<number | undefined>();
+const StringField = Field.ofType<string | undefined>();
 
 export class App extends React.Component<AppStateProps & AppDispatchProps> {
   public render() {
     const {
-      min_discharges, max_discharges, isFiltersOpen, toggleFilters,
+      min_discharges, max_discharges, isFiltersOpen,
       setHealthCareField, min_average_covered_charges, max_average_covered_charges,
       min_average_medicare_payments,
       max_average_medicare_payments,
@@ -37,25 +38,25 @@ export class App extends React.Component<AppStateProps & AppDispatchProps> {
       <div className={styles.app}>
         <Header />
         <Button icon="search" onClick={() => search()} intent={Intent.PRIMARY} large={true} className={styles.searchButton}>Search!</Button>
-        <Button onClick={() => toggleFilters(!isFiltersOpen)}>{isFiltersOpen ? "Hide" : "Show"} Filters</Button>
+        <Button onClick={() => setHealthCareField(fieldNames.isFiltersOpen, !isFiltersOpen)}>{isFiltersOpen ? "Hide" : "Show"} Filters</Button>
         <Collapse isOpen={isFiltersOpen} keepChildrenMounted={true}>
           <DualLayout className={styles.filtersRow}>
             <>
               <NumberField
                 title={"minimum # of discharges"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={min_discharges!}
                 onValueChange={(value) => setHealthCareField(fieldNames.min_discharges, value)}
               />
               <NumberField
                 title={"minimum average covered charges"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={min_average_covered_charges!}
                 onValueChange={(value) => setHealthCareField(fieldNames.min_average_covered_charges, value)}
               />
               <NumberField
                 title={"minium average medicare payments"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={min_average_medicare_payments!}
                 onValueChange={(value) => setHealthCareField(fieldNames.min_average_medicare_payments, value)}
               />
@@ -63,19 +64,19 @@ export class App extends React.Component<AppStateProps & AppDispatchProps> {
             <>
               <NumberField
                 title={"maximum # of discharges"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={max_discharges!}
                 onValueChange={(value) => setHealthCareField(fieldNames.max_discharges, value)}
               />
               <NumberField
                 title={"maximum average covered charges"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={max_average_covered_charges!}
                 onValueChange={(value) => setHealthCareField(fieldNames.max_average_covered_charges, value)}
               />
               <NumberField
                 title={"maxium average medicare payments"}
-                component={<NumericInput/>}
+                component={NumericInput}
                 value={max_average_medicare_payments!}
                 onValueChange={(value) => setHealthCareField(fieldNames.max_average_medicare_payments, value)}
               />
@@ -83,13 +84,19 @@ export class App extends React.Component<AppStateProps & AppDispatchProps> {
           </DualLayout>
           <StateField
             title={"select state"}
-            component={<StateCombo/>}
+            component={StateCombo}
             value={state}
             onValueChange={(item) => setHealthCareField(fieldNames.state, item)}
           />
+          <StringField
+            title={"select fields or leave blank for all fields"}
+            component={FieldSelection}
+            value={fields}
+            onValueChange={(value) => setHealthCareField(fieldNames.fields, value)}
+          />
         </Collapse>
         {results.length > 0 && <div className={styles.results}><Results results={results} /></div>}
-        {isLoading && <Spinner className={styles.spinner} intent={Intent.PRIMARY} size={100} />}
+        {isLoading && <div className={styles.backdrop}><Spinner className={styles.spinner} intent={Intent.PRIMARY} size={100} /></div>}
       </div>
     );
   }

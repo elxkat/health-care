@@ -20,7 +20,7 @@ export function healthCareService(app: Express) {
     try {
       const query = queryBuilder(queryParams);
       const queryRes = await pool.query(query);
-      res.send(JSON.stringify(queryRes.rows));
+      res.json(queryRes.rows);
     } catch(err) {
       console.log("Exception on healthCareService", queryParams, err);
       throw err;

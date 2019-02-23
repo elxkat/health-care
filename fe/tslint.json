@@ -13,6 +13,8 @@
     "no-empty-interface": false,
     "max-line-length": false,
     "jsx-no-lambda": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "jsx-no-multiline-js": false,
+    "no-console": false
   }
 }
