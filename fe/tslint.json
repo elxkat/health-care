@@ -1,0 +1,18 @@
+{
+  "extends": ["tslint:latest", "tslint-react"],
+  "rules": {
+    // override tslint-react rules here
+    "jsx-wrap-multiline": false,
+    "quotemark": false,
+    "ordered-imports": false,
+    "eofline": false,
+    "no-namespace": false,
+    "no-trailing-whitespace": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "no-empty-interface": false,
+    "max-line-length": false,
+    "jsx-no-lambda": false,
+    "no-var-requires": false
+  }
+}

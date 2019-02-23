@@ -1,0 +1,13 @@
+@import "../../../variables";
+
+.dualLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 1rem;
+  @media (min-width: $small-realestate) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 1rem;
+  }
+}
