@@ -18,10 +18,25 @@ export interface AppDispatchProps {
 }
 
 const StateField = Field.ofType<StateItem | undefined>();
-const NumberField = Field.ofType<number | undefined>();
+const NumericInputField = Field.ofType<number | undefined, { value: number | undefined, onValueChange: (value: number | undefined, valueAsStr: string) => void }>();
 const StringField = Field.ofType<string | undefined>();
 
 export class App extends React.Component<AppStateProps & AppDispatchProps> {
+
+  constructor(props: AppStateProps & AppDispatchProps) {
+    super(props);
+    this.onNumericFieldValueChange = this.onNumericFieldValueChange.bind(this);
+  }
+
+
+  private onNumericFieldValueChange(fieldName: string, value: number| undefined, valueAsStr: string) {
+    this.props.setHealthCareField(fieldName, valueAsStr === "" ? undefined : value);
+  }
+
+  private createNumericEventHandler(fieldName: string) {
+    return (value: number| undefined, valueAsStr: string) => this.onNumericFieldValueChange(fieldName, value, valueAsStr);
+  }
+
   public render() {
     const {
       min_discharges, max_discharges, isFiltersOpen,
@@ -39,61 +54,71 @@ export class App extends React.Component<AppStateProps & AppDispatchProps> {
         <Header />
         <Button icon="search" onClick={() => search()} intent={Intent.PRIMARY} large={true} className={styles.searchButton}>Search!</Button>
         <Button onClick={() => setHealthCareField(fieldNames.isFiltersOpen, !isFiltersOpen)}>{isFiltersOpen ? "Hide" : "Show"} Filters</Button>
-        <Collapse isOpen={isFiltersOpen} keepChildrenMounted={true}>
-          <DualLayout className={styles.filtersRow}>
-            <>
-              <NumberField
+        <Collapse className={styles.collapse} isOpen={isFiltersOpen} keepChildrenMounted={true}>
+          <div className={styles.filtersRow}>
+            <DualLayout>
+              <NumericInputField
                 title={"minimum # of discharges"}
                 component={NumericInput}
-                value={min_discharges!}
-                onValueChange={(value) => setHealthCareField(fieldNames.min_discharges, value)}
+                value={min_discharges}
+                onValueChange={this.createNumericEventHandler(fieldNames.min_discharges)}
               />
-              <NumberField
-                title={"minimum average covered charges"}
-                component={NumericInput}
-                value={min_average_covered_charges!}
-                onValueChange={(value) => setHealthCareField(fieldNames.min_average_covered_charges, value)}
-              />
-              <NumberField
-                title={"minium average medicare payments"}
-                component={NumericInput}
-                value={min_average_medicare_payments!}
-                onValueChange={(value) => setHealthCareField(fieldNames.min_average_medicare_payments, value)}
-              />
-            </>
-            <>
-              <NumberField
+              <NumericInputField
                 title={"maximum # of discharges"}
                 component={NumericInput}
-                value={max_discharges!}
-                onValueChange={(value) => setHealthCareField(fieldNames.max_discharges, value)}
+                value={max_discharges}
+                onValueChange={this.createNumericEventHandler(fieldNames.max_discharges)}
               />
-              <NumberField
+            </DualLayout>
+          </div>
+          <div className={styles.filtersRow}>
+            <DualLayout>
+              <NumericInputField
+                title={"minimum average covered charges"}
+                component={NumericInput}
+                value={min_average_covered_charges}
+                onValueChange={this.createNumericEventHandler(fieldNames.min_average_covered_charges)}
+              />
+              <NumericInputField
                 title={"maximum average covered charges"}
                 component={NumericInput}
-                value={max_average_covered_charges!}
-                onValueChange={(value) => setHealthCareField(fieldNames.max_average_covered_charges, value)}
+                value={max_average_covered_charges}
+                onValueChange={this.createNumericEventHandler(fieldNames.max_average_covered_charges)}
               />
-              <NumberField
+            </DualLayout>
+          </div>
+          <div className={styles.filtersRow}>
+            <DualLayout>
+              <NumericInputField
+                title={"minium average medicare payments"}
+                component={NumericInput}
+                value={min_average_medicare_payments}
+                onValueChange={this.createNumericEventHandler(fieldNames.min_average_medicare_payments)}
+              />
+              <NumericInputField
                 title={"maxium average medicare payments"}
                 component={NumericInput}
-                value={max_average_medicare_payments!}
-                onValueChange={(value) => setHealthCareField(fieldNames.max_average_medicare_payments, value)}
+                value={max_average_medicare_payments}
+                onValueChange={this.createNumericEventHandler(fieldNames.max_average_medicare_payments)}
               />
-            </>
-          </DualLayout>
-          <StateField
-            title={"select state"}
-            component={StateCombo}
-            value={state}
-            onValueChange={(item) => setHealthCareField(fieldNames.state, item)}
-          />
-          <StringField
-            title={"select fields or leave blank for all fields"}
-            component={FieldSelection}
-            value={fields}
-            onValueChange={(value) => setHealthCareField(fieldNames.fields, value)}
-          />
+            </DualLayout>
+          </div>
+          <div className={styles.filtersRow}>
+            <StateField
+              title={"select state"}
+              component={StateCombo}
+              value={state}
+              onValueChange={(item) => setHealthCareField(fieldNames.state, item)}
+            />
+          </div>
+          <div className={styles.filtersRow}>
+            <StringField
+              title={"select fields or leave blank for all fields"}
+              component={FieldSelection}
+              value={fields}
+              onValueChange={(value) => setHealthCareField(fieldNames.fields, value)}
+            />
+          </div>
         </Collapse>
         {results.length > 0 && <div className={styles.results}><Results results={results} /></div>}
         {isLoading && <div className={styles.backdrop}><Spinner className={styles.spinner} intent={Intent.PRIMARY} size={100} /></div>}

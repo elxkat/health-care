@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   flex-flow: column nowrap;
-  padding: 20px;
 }
 
 .searchButton {
@@ -36,3 +35,11 @@
   width: 100vw;
   height: 100vh;
 }
+
+.collapse {
+  overflow-y: auto!important; // override blueprint default
+}
+
+//:global(.bp3-collapse) {
+//  overflow: auto;
+//}

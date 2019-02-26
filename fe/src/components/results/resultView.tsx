@@ -18,10 +18,13 @@ export const ResultView: React.FunctionComponent<ResultViewProps> = (props) => {
           return;
         }
         return (
-          <DualLayout key={fieldName} className={styles.resultItem}>
-          <div>{fieldName}:</div>
-          <div>{fieldsToDisplay[fieldName]}</div>
-        </DualLayout>);
+          <div className={styles.resultItem}>
+            <DualLayout key={fieldName}>
+              <div>{fieldName}:</div>
+              <div>{fieldsToDisplay[fieldName]}</div>
+            </DualLayout>
+          </div>
+          );
       })}
     </Card>
   );
